@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s;
+        }
+        .navbar {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .main {
+            color: rgb(234, 11, 11);
+            text-align: center;
+            font-size: x-large;
+            padding: 0 20px;
+        }
+        .button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button input[type="submit"], .button button, .dark-mode-toggle {
+            font-size: large;
+            padding: 7px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s, border-color 0.3s;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        .button input[type="submit"]:hover, .button button:hover, .dark-mode-toggle:hover {
+            background-color: #45a049;
+            color: #fff;
+            transform: scale(0.95);
+            border: 2px solid transparent;
+        }
+        .button input[type="submit"]:before, .button button:before, .dark-mode-toggle:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
+            transform: translate(-50%, -50%) rotate(45deg);
+            z-index: 0;
+            transition: width 0.3s, height 0.3s;
+        }
+        .button input[type="submit"]:hover:before, .button button:hover:before, .dark-mode-toggle:hover:before {
+            width: 350%;
+            height: 350%;
+        }
+        .button input[type="submit"]:after, .button button:after, .dark-mode-toggle:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
+            transform: translate(-50%, -50%) rotate(45deg);
+            z-index: 0;
+            transition: width 0.3s, height 0.3s;
+        }
+        .button input[type="submit"]:hover:after, .button button:hover:after, .dark-mode-toggle:hover:after {
+            width: 350%;
+            height: 350%;
+        }
+        select {
+            padding: 5px;
+            font-size: medium;
+        }
+        @media only screen and (max-width: 600px) {
+            .main {
+                font-size: large;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h1> CURRENCY CONVERTER </h1>
+        <h3 style="color: red;"><marquee>Developed By : Rohit Salunkhe</marquee></h3>
+
+    </div>
+    <div class="main">
+        <form name="fm">
+            From: <select name="from">
+                <option value="INR">Indian Rupees</option>
+                <option value="USD">American Dollar</option>
+                
+                <option value="EUR">Euro</option>
+                <option value="GBP">British Pound</option>
+               
+                <option value="JPY">Japanese Yen</option>
+                <option value="CNY">Chinese Yuan Renminbi</option>
+                <option value="AUD">Australian Dollar</option>
+                <option value="CAD">Canadian Dollar</option>
+                <option value="CHF">Swiss Franc</option>
+                <option value="HKD">Hong Kong Dollar</option>
+                <option value="SGD">Singapore Dollar</option>
+                <option value="NZD">New Zealand Dollar</option>
+                <option value="KRW">South Korean Won</option>
+                <option value="SEK">Swedish Krona</option>
+                <option value="NOK">Norwegian Krone</option>
+                <option value="MXN">Mexican Peso</option>
+                <option value="BRL">Brazilian Real</option>
+                <option value="RUB">Russian Ruble</option>
+                <option value="ZAR">South African Rand</option>
+             
+            </select>
+            To: <select name="to">
+                <option value="INR">Indian Rupees</option>
+                <option value="USD">American Dollar</option>
+            
+                <option value="EUR">Euro</option>
+                <option value="GBP">British Pound</option>
+                
+                <option value="JPY">Japanese Yen</option>
+                <option value="CNY">Chinese Yuan Renminbi</option>
+                <option value="AUD">Australian Dollar</option>
+                <option value="CAD">Canadian Dollar</option>
+                <option value="CHF">Swiss Franc</option>
+                <option value="HKD">Hong Kong Dollar</option>
+                <option value="SGD">Singapore Dollar</option>
+                <option value="NZD">New Zealand Dollar</option>
+                <option value="KRW">South Korean Won</option>
+                <option value="SEK">Swedish Krona</option>
+                <option value="NOK">Norwegian Krone</option>
+                <option value="MXN">Mexican Peso</option>
+                <option value="BRL">Brazilian Real</option>
+                <option value="RUB">Russian Ruble</option>
+                <option value="ZAR">South African Rand</option>
+            
+            </select>
+            <br><br>
+            Enter amount: <input type="number" name="amount"/>
+        </form>
+        <h1>Converted amount: <span id="amt"></span></h1>
+    </div>
+    <div class="button">
+        <input type="submit" value="Convert" onclick="convertor()"/>
+    </div>
+    <div class="button">
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()" style="background-color: red;">Dark Mode</button>
+    </div>
+
+    <script>
+        function convertor() {
+            var from = document.fm.from.value;
+            var to = document.fm.to.value;
+            var amount = parseFloat(document.fm.amount.value);
+
+            var url = `https://api.exchangerate-api.com/v4/latest/${from}`;
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                var convertedAmount = data.rates[to] * amount;
+                document.getElementById('amt').innerHTML = convertedAmount.toFixed(2);
+            })
+            .catch(error => {
+                console.error('Error fetching exchange rate:', error);
+                document.getElementById('amt').innerHTML = 'Error';
+            });
+        }
+
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle("dark-mode");
+            if (body.classList.contains("dark-mode")) {
+                body.style.backgroundColor = "#111";
+            } else {
+                body.style.backgroundColor = "#f2f2f2";
+            }
+        }
+    </script>
+</body>
+</html>
